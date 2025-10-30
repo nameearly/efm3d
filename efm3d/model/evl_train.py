@@ -408,7 +408,7 @@ class EVLTrain(EVL):
         black = (0.0, 0.0, 0.0, 1.0)
         green = (0.0, 1.0, 0.0, 1.0)
         Ts_wc = Ts_wr @ cams.T_camera_rig.inverse()
-        for t, (T_wr, T_wc, cam) in enumerate(zip(Ts_wr, Ts_wc, cams)):
+        for T_wr, T_wc, cam in zip(Ts_wr, Ts_wc, cams):
             scene.clear()
             if view == "follow":
                 scene.set_follow_view(T_wc, zoom_factor=4)
