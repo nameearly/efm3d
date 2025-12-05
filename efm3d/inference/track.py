@@ -66,7 +66,7 @@ def track_obbs(input_path, prob_inst_thr=0.3, prob_assoc_thr=0.25):
     )
 
     # write snippet-level tracked obbs
-    for i, (t_ns, obbs) in enumerate(reader):
+    for t_ns, obbs in reader:
         tracked_obbs, unviz_obbs = tracker.track(obbs)
         # seq_obb_eval use both tracked and unviz obbs
         all_tracked_obbs = torch.cat([tracked_obbs, unviz_obbs], dim=-2)
