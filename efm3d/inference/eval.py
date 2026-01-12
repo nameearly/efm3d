@@ -30,9 +30,9 @@ def check_sem_id_conflict(ids_pred, ids_gt):
     all_sem_ids = set(list(ids_pred.keys()) + list(ids_gt.keys()))
     for sem_id in all_sem_ids:
         if sem_id in ids_pred and sem_id in ids_gt:
-            assert (
-                ids_pred[sem_id] == ids_gt[sem_id]
-            ), f"Mismatch id to name for sem id {sem_id}, {ids_pred[sem_id]} in pred but {ids_gt[sem_id]} in GT"
+            assert ids_pred[sem_id] == ids_gt[sem_id], (
+                f"Mismatch id to name for sem id {sem_id}, {ids_pred[sem_id]} in pred but {ids_gt[sem_id]} in GT"
+            )
         elif sem_id not in ids_pred:
             print(f"sem_id {sem_id} not found in pred")
         else:
@@ -111,9 +111,9 @@ def evaluate_obb_csv(
             )
         # check if the preds contain probabilities
         prob = pred_obbs[t].prob.squeeze()
-        assert not torch.all(
-            prob.eq(-1.0)
-        ), "the obbs don't contain valid probabilities for mAP calculation."
+        assert not torch.all(prob.eq(-1.0)), (
+            "the obbs don't contain valid probabilities for mAP calculation."
+        )
         # add pred/gt pair to mAP calculator.
         mAP.update(pred_obbs[t], gt_obbs[t])
 

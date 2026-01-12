@@ -15,7 +15,6 @@
 from typing import List, Optional, Union
 
 import numpy as np
-
 import torch
 from efm3d.aria.aria_constants import (
     ARIA_CALIB,
@@ -27,10 +26,8 @@ from efm3d.aria.aria_constants import (
 )
 from efm3d.aria.obb import ObbTW
 from efm3d.aria.pose import PoseTW
-
 from efm3d.model.evl import EVL
 from efm3d.model.lifter import VideoBackbone3d
-
 from efm3d.model.video_backbone import VideoBackbone
 from efm3d.utils.evl_loss import compute_obb_losses, compute_occ_losses, get_gt_obbs
 from efm3d.utils.image import put_text

@@ -100,9 +100,9 @@ if __name__ == "__main__":
             for seq in seq_ids[: args.num_seqs]
         ]
     else:
-        assert (
-            args.ase or args.adt or args.aeo
-        ), "Specify eval dataset, for example, --ase"
+        assert args.ase or args.adt or args.aeo, (
+            "Specify eval dataset, for example, --ase"
+        )
 
     for input_path in input_paths:
         run_one(

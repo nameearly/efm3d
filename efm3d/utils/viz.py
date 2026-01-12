@@ -16,7 +16,6 @@ import platform
 from typing import Optional, Tuple, Union
 
 import moderngl
-
 import numpy as np
 import torch
 from efm3d.aria.aria_constants import (
@@ -173,9 +172,9 @@ def render_scalar_field_points(
     alphas=None,
 ):
     assert pts.shape[-1] == 3, f"only support 3d points {pts.shape}"
-    assert (
-        pts.numel() == 3 * values.numel()
-    ), f"pts and values must have same numel {pts.numel()} {values.numel()}, {pts.shape} and {values.shape}"
+    assert pts.numel() == 3 * values.numel(), (
+        f"pts and values must have same numel {pts.numel()} {values.numel()}, {pts.shape} and {values.shape}"
+    )
 
     if isinstance(pts, torch.Tensor):
         pts = pts.detach().cpu().float().numpy()
@@ -1002,13 +1001,13 @@ def draw_snippet_scene_3d(
     # clip the point cloud 1m above the rig coordinates
     z_height_clip = Ts_wr.t[..., 2].max() + 1.0
 
-    assert (
-        Ts_wr.shape[0] == cams.shape[0]
-    ), f"poses and cameras must have the same length but got {Ts_wr.shape[0]} and {cams.shape[0]}"
+    assert Ts_wr.shape[0] == cams.shape[0], (
+        f"poses and cameras must have the same length but got {Ts_wr.shape[0]} and {cams.shape[0]}"
+    )
     if obbs is not None:
-        assert Ts_wr.shape[0] == len(
-            obbs
-        ), f"poses and obbs must have the same length {len(obbs)} but got {Ts_wr.shape}"
+        assert Ts_wr.shape[0] == len(obbs), (
+            f"poses and obbs must have the same length {len(obbs)} but got {Ts_wr.shape}"
+        )
 
     if frame_id:
         assert frame_id >= 0 and frame_id < Ts_wr.shape[0]

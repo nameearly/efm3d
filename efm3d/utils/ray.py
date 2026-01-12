@@ -44,9 +44,9 @@ def grid_ray(pixel_grid, camera):
     pixel_grid = einops.repeat(pixel_grid, "n c -> b n c", b=batch_size)
     rays, valid = camera.double().unproject(pixel_grid.double())
     rays = rays.float()
-    assert not torch.isnan(
-        rays
-    ).any(), f"have {torch.isnan(rays).count_nonzero().item()} nans in rays. Camera params: {camera.params}"
+    assert not torch.isnan(rays).any(), (
+        f"have {torch.isnan(rays).count_nonzero().item()} nans in rays. Camera params: {camera.params}"
+    )
     rays = F.normalize(rays, p=2, dim=-1, eps=eps)
     rays = torch.where(valid.unsqueeze(-1), rays, torch.zeros_like(rays))
     T_rig_camera = camera.T_camera_rig.inverse()
@@ -88,9 +88,9 @@ def transform_rays(rays_old: torch.Tensor, T_new_old):
     """
     Expects rays to be in old coordinate frame
     """
-    assert rays_old.shape[
-        -1
-    ], "Rays must be 6 dimensional in the following order: [ray_origins, ray_directions]"
+    assert rays_old.shape[-1], (
+        "Rays must be 6 dimensional in the following order: [ray_origins, ray_directions]"
+    )
     ray_origins = T_new_old.transform(rays_old[..., :3])
     ray_directions = T_new_old.rotate(rays_old[..., 3:])
     return torch.cat([ray_origins, ray_directions], dim=-1)

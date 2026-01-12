@@ -19,7 +19,6 @@ from typing import Dict, List, Optional
 import einops
 import torch
 import torch.nn as nn
-
 from efm3d.aria.aria_constants import ARIA_IMG
 from hydra.utils import instantiate
 from omegaconf import DictConfig
@@ -66,11 +65,9 @@ class VideoBackbone(torch.nn.Module, ABC):
             self.video_streams = ["rgb"]
         self.pass_batch = pass_batch
         self.stream_to_id = {"rgb": 0, "slaml": 1, "slamr": 2}
-        assert set(
-            self.video_streams
-        ).issubset(
-            set(self.stream_to_id.keys())
-        ), f"{self.video_streams} are not all valid (need to be a subset of {self.stream_to_id.keys()})"
+        assert set(self.video_streams).issubset(set(self.stream_to_id.keys())), (
+            f"{self.video_streams} are not all valid (need to be a subset of {self.stream_to_id.keys()})"
+        )
 
         self.vignette_correction = {}
         self.vignette_correction = nn.ModuleDict(self.vignette_correction)
@@ -122,9 +119,9 @@ class VideoBackbone(torch.nn.Module, ABC):
                 # accumulate updates into one flat dict
                 out.update(self.forward_impl(im, stream))
 
-        assert isinstance(
-            out, dict
-        ), f"Output of forward must be of type dict, got {type(out)}"
+        assert isinstance(out, dict), (
+            f"Output of forward must be of type dict, got {type(out)}"
+        )
         assert set(self.video_streams).issubset(set(out.keys()))
         return out
 

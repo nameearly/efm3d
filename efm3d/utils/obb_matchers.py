@@ -131,16 +131,16 @@ class HungarianMatcher2d3d(torch.nn.Module):
         assert pred_center_world.dim() == 3, f"{pred_center_world.shape}"
         B, N = pred_bb2s.shape[:2]
         assert len(tgt_bb2s) == B, "number of targets should be equal to batch size"
-        assert (
-            len(tgt_center_world) == B
-        ), "number of targets should be equal to batch size"
+        assert len(tgt_center_world) == B, (
+            "number of targets should be equal to batch size"
+        )
 
         cost_class = None
         if pred_logits is not None:
             assert pred_logits.dim() == 3, f"{pred_logits.shape}"
-            assert (
-                len(tgt_labels) == B
-            ), "number of targets should be equal to batch size"
+            assert len(tgt_labels) == B, (
+                "number of targets should be equal to batch size"
+            )
             # We flatten to compute the cost matrices in a batch
             # [batch_size * num_queries, num_semcls]
             out_prob = pred_logits.flatten(0, 1)

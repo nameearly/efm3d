@@ -51,9 +51,9 @@ class FeatureFusionBlock(nn.Module):
     def forward(self, x, skip_x=None):
         if skip_x is not None:
             assert self.with_skip, "Must init with with_skip=True"
-            assert (
-                skip_x.shape == x.shape
-            ), f"skip {skip_x.shape} and x {x.shape} shape mismatch"
+            assert skip_x.shape == x.shape, (
+                f"skip {skip_x.shape} and x {x.shape} shape mismatch"
+            )
             x = self.resConfUnit1(x) + skip_x
 
         x = self.resConfUnit2(x)
@@ -164,9 +164,9 @@ class DPTOri(nn.Module):
         """
         feats: tokens from multi-layers, for ViT-base these are [3,6,9,12] (starting from 1, not 0)
         """
-        assert (
-            len(feats) == 4
-        ), "feats must be multi-level as a list of 4 tensors, probably set model.video_backbone.image_tokenizer.multilayer_output=True"
+        assert len(feats) == 4, (
+            "feats must be multi-level as a list of 4 tensors, probably set model.video_backbone.image_tokenizer.multilayer_output=True"
+        )
         ndim = feats[0].ndim
         if ndim == 5:
             T = feats[0].shape[1]

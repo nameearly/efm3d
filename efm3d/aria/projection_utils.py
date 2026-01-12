@@ -64,9 +64,9 @@ def fisheye624_project(xyz, params):
         xyz.ndim == 4 and params.ndim == 3
     ), f"point dim {xyz.shape} does not match cam parameter dim {params}"
     assert xyz.shape[-1] == 3
-    assert (
-        params.shape[-1] == 16 or params.shape[-1] == 15
-    ), "This model allows fx != fy"
+    assert params.shape[-1] == 16 or params.shape[-1] == 15, (
+        "This model allows fx != fy"
+    )
     assert xyz.dtype == params.dtype, "data type must match"
 
     eps = 1e-9
@@ -167,12 +167,12 @@ def fisheye624_unproject(uv, params, max_iters: int = 5):
 
     assert uv.ndim == 3 or uv.ndim == 4, "Expected batched input shaped Bx(T)xNx2"
     assert uv.shape[-1] == 2
-    assert (
-        params.ndim == 2 or params.ndim == 3
-    ), "Expected batched input shaped Bx(T)x16 or Bx(T)x15"
-    assert (
-        params.shape[-1] == 16 or params.shape[-1] == 15
-    ), "This model allows fx != fy"
+    assert params.ndim == 2 or params.ndim == 3, (
+        "Expected batched input shaped Bx(T)x16 or Bx(T)x15"
+    )
+    assert params.shape[-1] == 16 or params.shape[-1] == 15, (
+        "This model allows fx != fy"
+    )
     assert uv.dtype == params.dtype, "data type must match"
     eps = 1e-6
 

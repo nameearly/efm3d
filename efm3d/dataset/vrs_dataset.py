@@ -15,14 +15,12 @@
 import math
 import os
 import random
-
 from typing import Callable, List, Optional, Union
 
 import numpy as np
 import pyvrs
 import torch
 import torch.nn.functional as F
-
 from efm3d.aria import CameraTW, ObbTW, PoseTW, smart_stack, transform_obbs
 from efm3d.aria.aria_constants import (
     ARIA_CALIB,
@@ -274,7 +272,7 @@ def run_sensor_poses(batch, num_notified=-1, max_notified=10):
                     counts = good.sum(dim=-1).squeeze()
                     if num_notified > 0 and num_notified < max_notified:
                         print(
-                            f"some interpolated poses were bad (fraction good per batch: {counts/good.shape[-1]}); likely because tried to interpolated past given input timed poses."
+                            f"some interpolated poses were bad (fraction good per batch: {counts / good.shape[-1]}); likely because tried to interpolated past given input timed poses."
                         )
         return new_batch
 
@@ -410,9 +408,9 @@ class VrsSequenceDataset(Dataset):
 
         timedTs_world_object = self.obs["timedTs_world_object"]
         static_Ts_world_object = {}
-        assert (
-            len(timedTs_world_object) != 0
-        ), "Warning: no observations found for entire sequence"
+        assert len(timedTs_world_object) != 0, (
+            "Warning: no observations found for entire sequence"
+        )
         # timedTs_world_object captures static object at the -1 timestamp
         if -1 in timedTs_world_object.keys():
             static_Ts_world_object = timedTs_world_object[-1]
@@ -505,7 +503,7 @@ class VrsSequenceDataset(Dataset):
                 self.time_to_dist_std[time] = dist_std
                 self.time_to_inv_dist_std[time] = inv_dist_std
         print(
-            f"Found {len(self.uid_to_p3)} semidense points; time range {min(self.pts_times_ns)/1e9}s-{max(self.pts_times_ns)/1e9}s"
+            f"Found {len(self.uid_to_p3)} semidense points; time range {min(self.pts_times_ns) / 1e9}s-{max(self.pts_times_ns) / 1e9}s"
         )
 
         # aggregate all the points

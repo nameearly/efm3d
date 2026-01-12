@@ -243,12 +243,12 @@ def main(
     download_wds_to_local: bool = False,
     train_val_split_json_path: Optional[str] = None,
 ):
-    assert os.path.exists(
-        input_json_path
-    ), f"Input JSON file {input_json_path} does not exist."
-    assert (
-        os.path.exists(output_folder_path) is False
-    ), f"Output folder {output_folder_path} already exists. Please delete this folder and retry"
+    assert os.path.exists(input_json_path), (
+        f"Input JSON file {input_json_path} does not exist."
+    )
+    assert os.path.exists(output_folder_path) is False, (
+        f"Output folder {output_folder_path} already exists. Please delete this folder and retry"
+    )
 
     # extract tar urls
     with open(input_json_path, "r") as file:

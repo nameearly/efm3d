@@ -27,9 +27,7 @@ from efm3d.aria.aria_constants import (
     ARIA_SNIPPET_T_WORLD_SNIPPET,
 )
 from efm3d.model.cnn import UpsampleCNN
-
 from efm3d.model.dpt import DPTOri
-
 from efm3d.utils.gravity import gravity_align_T_world_cam, GRAVITY_DIRECTION_VIO
 from efm3d.utils.image_sampling import sample_images
 from efm3d.utils.pointcloud import pointcloud_to_voxel_counts
@@ -158,9 +156,9 @@ class Lifter(VideoBackbone3d):
         x_meters = (voxel_extent[1] - voxel_extent[0]) / self.voxel_size[2]
         y_meters = (voxel_extent[3] - voxel_extent[2]) / self.voxel_size[1]
         z_meters = (voxel_extent[5] - voxel_extent[4]) / self.voxel_size[0]
-        assert (
-            abs(x_meters - y_meters) < 1e-5 and abs(x_meters - z_meters) < 1e-5
-        ), f"Voxels should be cubes {x_meters}x{y_meters}x{z_meters}"
+        assert abs(x_meters - y_meters) < 1e-5 and abs(x_meters - z_meters) < 1e-5, (
+            f"Voxels should be cubes {x_meters}x{y_meters}x{z_meters}"
+        )
         self.voxel_meters = x_meters
         self.num_free_samples = 16
 

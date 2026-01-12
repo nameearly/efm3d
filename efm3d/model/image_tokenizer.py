@@ -14,12 +14,10 @@
 
 import logging
 import math
-
 from typing import List
 
 import einops
 import torch
-
 import torch.nn.functional as F
 from efm3d.model.dinov2_utils import dino_name_mappings, DinoV2Wrapper
 
@@ -60,9 +58,9 @@ class ImageToDinoV2Tokens(torch.nn.Module):
 
         self.lin = None
         if not add_lin_layer:
-            assert (
-                dim_out == self.model.feat_dim
-            ), f"dim_out must match DinoV2 feature dim if not adding linear layer, but get dim_out: {dim_out} and feat_dim: {self.model.feat_dim}."
+            assert dim_out == self.model.feat_dim, (
+                f"dim_out must match DinoV2 feature dim if not adding linear layer, but get dim_out: {dim_out} and feat_dim: {self.model.feat_dim}."
+            )
         else:
             self.lin = torch.nn.Linear(self.model.feat_dim, dim_out)
             print(

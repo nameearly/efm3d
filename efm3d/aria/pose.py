@@ -17,7 +17,6 @@ import math
 from typing import Dict, List, Tuple, Union
 
 import numpy as np
-
 import torch
 import torch.nn.functional as F
 
@@ -226,9 +225,9 @@ class PoseTW(TensorWrapper):
             quaternion: quaternion with shape (..., 4).
             t: translation vector with shape (..., 3).
         """
-        assert (
-            quaternion_wxyz.shape[:-1] == t.shape[:-1]
-        ), f"quaternion shape {quaternion_wxyz.shape[:-1]} must match translation shape {t.shape[:-1]} expect the last dim"
+        assert quaternion_wxyz.shape[:-1] == t.shape[:-1], (
+            f"quaternion shape {quaternion_wxyz.shape[:-1]} must match translation shape {t.shape[:-1]} expect the last dim"
+        )
         assert quaternion_wxyz.shape[-1] == 4, "quaternion must be of shape (..., 4)"
         assert t.shape[-1] == 3, "translation must be of shape (..., 3)"
 
@@ -596,13 +595,13 @@ class PoseTW(TensorWrapper):
         at the interval boundaries will be returned and the good boolean tensor
         will indicate those boundary values with a False.
         """
-        assert (
-            times.shape == self._data.shape[:-1]
-        ), f"time stamps for the poses do not match poses shape {times.shape} vs {self._data.shape}"
+        assert times.shape == self._data.shape[:-1], (
+            f"time stamps for the poses do not match poses shape {times.shape} vs {self._data.shape}"
+        )
 
-        assert (
-            times.dim() <= 2
-        ), "The shape of the input times should be either BxT or T."
+        assert times.dim() <= 2, (
+            "The shape of the input times should be either BxT or T."
+        )
         times = times.to(self.device)
         interp_times = interp_times.to(self.device)
         # find the closest timestamps above and below for each interp_times in times

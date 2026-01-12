@@ -632,9 +632,9 @@ def prec_recall_bb3(
     per_class=False,
 ):
     """Compute precision and recall based on 3D IoU."""
-    assert (
-        padded_pred.ndim == 2 and padded_target.ndim == 2
-    ), f"input ObbTWs must be Nx34, but got {padded_pred.shape} and {padded_target.shape}"
+    assert padded_pred.ndim == 2 and padded_target.ndim == 2, (
+        f"input ObbTWs must be Nx34, but got {padded_pred.shape} and {padded_target.shape}"
+    )
 
     pred = padded_pred.remove_padding()
     target = padded_target.remove_padding()

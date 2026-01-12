@@ -473,7 +473,7 @@ def get_points_counts(
             N = p_w.shape[0]
             p = dropout_points_rate_max
             Ndrop = int(N * (torch.rand(1).item() * p + (1.0 - p)))
-            print(f"dropout {N-Ndrop}/{N} points")
+            print(f"dropout {N - Ndrop}/{N} points")
             rnd = torch.randperm(N, device=p_w.device)[:Ndrop]
             p_w = p_w[rnd, :]
         # transform points into voxel coordinate.

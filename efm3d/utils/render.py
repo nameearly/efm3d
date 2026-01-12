@@ -145,9 +145,9 @@ def draw_bb2s(
         cv2.line(img, p1, p2, clr, thickness, lineType=line_type)
 
     if isinstance(color[0], (list, tuple, np.ndarray)):
-        assert len(color) == len(
-            bb2s
-        ), "need either single color or same # of colors as bb2s"
+        assert len(color) == len(bb2s), (
+            "need either single color or same # of colors as bb2s"
+        )
         if isinstance(color[0], np.ndarray):
             colors = [clr.tolist() for clr in color]
         else:
@@ -377,9 +377,9 @@ def draw_obbs_image(
     draw_conic: bool = False,
 ):
     assert img.dim() == 3, f"image input must be 3D tensor {img.shape}"
-    assert (
-        obbs_padded.dim() == 2
-    ), f"assuming one set of obbs per frame {obbs_padded.shape}"
+    assert obbs_padded.dim() == 2, (
+        f"assuming one set of obbs per frame {obbs_padded.shape}"
+    )
 
     viz = torch2cv2(img, rotate=False, ensure_rgb=True, rgb2bgr=rgb2bgr)
     if not post_rotate_viz and rotate_viz:

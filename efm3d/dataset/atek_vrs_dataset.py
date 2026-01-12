@@ -16,7 +16,6 @@
 
 import logging
 import os
-
 from typing import Dict, List, Optional
 
 from atek.data_loaders.atek_wds_dataloader import select_and_remap_dict_keys
@@ -24,7 +23,6 @@ from atek.data_preprocess.atek_data_sample import AtekDataSample
 from atek.data_preprocess.sample_builders.atek_data_paths_provider import (
     AtekDataPathsProvider,
 )
-
 from atek.data_preprocess.sample_builders.efm_sample_builder import EfmSampleBuilder
 from atek.data_preprocess.subsampling_lib.temporal_subsampler import (
     CameraTemporalSubsampler,

@@ -77,9 +77,9 @@ def get_crops_scale(
         # This rescale factor can be non-integer.
         factor_w = W / target_w
         factor_h = H / target_h
-        assert (
-            factor_w == factor_h
-        ), "rescale factor must maintain original aspect ratio"
+        assert factor_w == factor_h, (
+            "rescale factor must maintain original aspect ratio"
+        )
         factor = factor_w
         post_crop = None
     else:

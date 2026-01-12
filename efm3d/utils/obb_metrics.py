@@ -17,7 +17,6 @@ from time import time
 from typing import Dict, List, Optional
 
 import torch
-
 from efm3d.aria.camera import CameraTW
 from efm3d.aria.obb import ObbTW
 from efm3d.utils.file_utils import parse_global_name_to_id_csv
@@ -63,9 +62,9 @@ class ObbMetrics(torch.nn.Module):
         from torchmetrics.detection.mean_ap import MeanAveragePrecision
 
         super().__init__()
-        assert (
-            eval_2d or eval_3d
-        ), "At least eval_2d or eval_3d needs to be set to True."
+        assert eval_2d or eval_3d, (
+            "At least eval_2d or eval_3d needs to be set to True."
+        )
         self.eval_2d = eval_2d
         self.eval_3d = eval_3d
         self.ignore_bb2d_visibility = ignore_bb2d_visibility
@@ -243,7 +242,7 @@ class ObbMetrics(torch.nn.Module):
                 m3d = self.metric_3d[cam_name].compute(self.sem_id_to_name)
                 t1 = time()
                 logger.info(
-                    f"DONE Computing metric {self.metric_3d[cam_name]} in {t1-t0} seconds"
+                    f"DONE Computing metric {self.metric_3d[cam_name]} in {t1 - t0} seconds"
                 )
                 for metric_name, val in m3d.items():
                     metrics[f"{cam_name}/{metric_name}_3D"] = val

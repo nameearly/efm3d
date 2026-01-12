@@ -142,7 +142,7 @@ def render_views(snippet, h, w, pred_sem_ids_to_names, gt_sem_ids_to_names):
     T_ws = snippet[ARIA_SNIPPET_T_WORLD_SNIPPET]
     Ts_wr = T_ws @ Ts_sr
     rgb_ts = snippet[ARIA_IMG_TIME_NS[0]]
-    time_s = [f"{ts.item()*1e-9:.02f}s" for ts in rgb_ts]
+    time_s = [f"{ts.item() * 1e-9:.02f}s" for ts in rgb_ts]
 
     imgs = {}
     # RGB and SLAM

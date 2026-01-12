@@ -28,7 +28,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint
 import torchvision.transforms as T
-
 from torch import Tensor
 from torch.nn.init import trunc_normal_
 from torch.nn.utils import weight_norm
@@ -514,9 +513,9 @@ class NestedTensorBlock(Block):
         if isinstance(x_or_x_list, Tensor):
             return super().forward(x_or_x_list)
         elif isinstance(x_or_x_list, list):
-            assert (
-                XFORMERS_AVAILABLE
-            ), "Please install xFormers for nested tensors usage"
+            assert XFORMERS_AVAILABLE, (
+                "Please install xFormers for nested tensors usage"
+            )
             return self.forward_nested(x_or_x_list)
         else:
             raise AssertionError
@@ -1107,9 +1106,9 @@ class DinoVisionTransformer(nn.Module):
             x = blk(x)
             if i in blocks_to_take:
                 output.append(x)
-        assert len(output) == len(
-            blocks_to_take
-        ), f"only {len(output)} / {len(blocks_to_take)} blocks found"
+        assert len(output) == len(blocks_to_take), (
+            f"only {len(output)} / {len(blocks_to_take)} blocks found"
+        )
         return output
 
     def _get_intermediate_layers_chunked(self, x, n=1):
@@ -1125,9 +1124,9 @@ class DinoVisionTransformer(nn.Module):
                 if i in blocks_to_take:
                     output.append(x)
                 i += 1
-        assert len(output) == len(
-            blocks_to_take
-        ), f"only {len(output)} / {len(blocks_to_take)} blocks found"
+        assert len(output) == len(blocks_to_take), (
+            f"only {len(output)} / {len(blocks_to_take)} blocks found"
+        )
         return output
 
     def get_intermediate_layers(
@@ -1334,9 +1333,9 @@ class DinoV2Wrapper(torch.nn.Module):
     ):
         super().__init__()
 
-        assert (
-            name in dino_name_mappings.keys()
-        ), f"Dino model name should be one of {dino_name_mappings.keys()}"
+        assert name in dino_name_mappings.keys(), (
+            f"Dino model name should be one of {dino_name_mappings.keys()}"
+        )
 
         assert os.path.exists(ckpt_path), f"Missing DinoV2 checkpoint path {ckpt_path}"
         print(f"Use the provided DinoV2 checkpoint path {ckpt_path}")
@@ -1390,9 +1389,9 @@ class DinoV2Wrapper(torch.nn.Module):
         img = self.normalize_fn(img)  # Apply imagenet normalization.
         feats = self.forward_fn(img)["x_norm_patchtokens"]
         H, W = img.shape[-2:]
-        assert (
-            H % self.patch_size == 0 and W % self.patch_size == 0
-        ), "Resize the images to a multiple of patch size"
+        assert H % self.patch_size == 0 and W % self.patch_size == 0, (
+            "Resize the images to a multiple of patch size"
+        )
         pH = H // self.patch_size
         pW = W // self.patch_size
         if isinstance(feats, List):

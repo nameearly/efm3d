@@ -20,7 +20,6 @@ from typing import List
 import numpy as np
 import torch
 import tqdm
-
 import trimesh
 from efm3d.aria.pose import PoseTW
 from efm3d.utils.marching_cubes import marching_cubes_scaled
@@ -213,9 +212,9 @@ class VolumetricFusion:
         self.per_snip_folder = os.path.join(input_folder, "per_snip")
         f_vol_min = os.path.join(self.per_snip_folder, "scene_vol_min.pt")
         f_vol_max = os.path.join(self.per_snip_folder, "scene_vol_max.pt")
-        assert os.path.exists(f_vol_min) and os.path.exists(
-            f_vol_max
-        ), "missing scene volume info"
+        assert os.path.exists(f_vol_min) and os.path.exists(f_vol_max), (
+            "missing scene volume info"
+        )
         self.vol_min = load_tensor(f_vol_min, "cpu").numpy()
         self.vol_max = load_tensor(f_vol_max, "cpu").numpy()
         self.w_min = w_min
@@ -232,9 +231,9 @@ class VolumetricFusion:
         )
         Ts_wv_pt = os.path.join(self.per_snip_folder, "Ts_wv.pt")
         self.Ts_wv = torch.load(Ts_wv_pt, map_location="cpu")  # need to be on cpu
-        assert (
-            len(self.f_occ_preds) == self.Ts_wv.shape[0]
-        ), f"occ snippets {len(self.f_occ_preds)} should match with Ts_wv {self.Ts_wv.shape[0]}"
+        assert len(self.f_occ_preds) == self.Ts_wv.shape[0], (
+            f"occ snippets {len(self.f_occ_preds)} should match with Ts_wv {self.Ts_wv.shape[0]}"
+        )
 
         # load voxel extent for initialization
         ve_path = os.path.join(self.per_snip_folder, "voxel_extent.pt")

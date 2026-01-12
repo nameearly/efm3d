@@ -16,7 +16,6 @@ import logging
 import os
 
 import torch
-
 from efm3d.utils.obb_csv_writer import ObbCsvReader, ObbCsvWriter
 from efm3d.utils.obb_trackers import ObbTracker
 

@@ -24,7 +24,6 @@ from efm3d.aria.aria_constants import (
     ARIA_POINTS_INV_DIST_STD,
     ARIA_POINTS_WORLD,
 )
-
 from torchvision.transforms.v2._color import RandomAdjustSharpness
 from webdataset import WebDataset
 

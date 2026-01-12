@@ -84,9 +84,9 @@ class UpsampleCNN(nn.Module):
             c = [first_hidden_dim] * (upsample_power + 1)
         else:
             first_hidden_dim = first_hidden_dim if first_hidden_dim > 0 else input_dim
-            assert (
-                first_hidden_dim // 2 ** (upsample_power) >= 1
-            ), f"first_hidden_dim must be at least {2 ** (upsample_power)}, but got {first_hidden_dim}."
+            assert first_hidden_dim // 2 ** (upsample_power) >= 1, (
+                f"first_hidden_dim must be at least {2 ** (upsample_power)}, but got {first_hidden_dim}."
+            )
             # subsequently halve the hidden dim by 2x
             c = [first_hidden_dim] + [
                 first_hidden_dim // 2 ** (i + 1) for i in range(upsample_power)

@@ -32,7 +32,6 @@ from datetime import datetime
 
 import hydra
 import omegaconf
-
 import torch
 import torch.distributed as dist
 import tqdm
@@ -86,9 +85,9 @@ def get_dataloader(
     epoch_sample_ratio=1.0,
     tar_yaml="train_tars.yaml",
 ):
-    assert (
-        epoch_sample_ratio > 0 and epoch_sample_ratio <= 1.0
-    ), f"{epoch_sample_ratio} is the ratio ([0, 1]) of samples used in each epoch"
+    assert epoch_sample_ratio > 0 and epoch_sample_ratio <= 1.0, (
+        f"{epoch_sample_ratio} is the ratio ([0, 1]) of samples used in each epoch"
+    )
 
     tar_yaml = os.path.join(data_path, tar_yaml)
     with open(tar_yaml, "r") as f:

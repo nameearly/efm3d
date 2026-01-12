@@ -82,12 +82,12 @@ def sample_images(
     else:
         cams_resize = cams
 
-    assert (
-        round(cams_resize[0].size[0].item()) == featW
-    ), f"height of cam and feature image do not match. {cams_resize[0].size[0]}!= {feat2d.shape}"
-    assert (
-        round(cams_resize[0].size[1].item()) == featH
-    ), f"width of cam and feature image do not match. {cams_resize[0].size[1]}!= {feat2d.shape}"
+    assert round(cams_resize[0].size[0].item()) == featW, (
+        f"height of cam and feature image do not match. {cams_resize[0].size[0]}!= {feat2d.shape}"
+    )
+    assert round(cams_resize[0].size[1].item()) == featH, (
+        f"width of cam and feature image do not match. {cams_resize[0].size[1]}!= {feat2d.shape}"
+    )
 
     samp_pts, valid = cams_resize.project(query_pts_cam)
     if warn:

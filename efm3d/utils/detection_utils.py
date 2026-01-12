@@ -15,7 +15,6 @@
 import numpy as np
 import torch
 import torchvision
-
 from efm3d.aria.obb import ObbTW
 from efm3d.aria.pose import PAD_VAL, PoseTW, rotation_from_euler
 

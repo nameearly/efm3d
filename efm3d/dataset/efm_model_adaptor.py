@@ -18,7 +18,6 @@ from functools import partial
 from typing import Callable, Dict, List, Optional
 
 import torch
-
 import webdataset as wds
 from atek.data_loaders.atek_wds_dataloader import (
     load_atek_wds_dataset,
@@ -41,7 +40,6 @@ from efm3d.aria.aria_constants import (
 )
 from efm3d.aria.obb import transform_obbs
 from efm3d.aria.tensor_wrapper import smart_stack
-
 from webdataset.filters import pipelinefilter
 
 logger = logging.getLogger(__name__)

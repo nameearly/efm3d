@@ -410,9 +410,9 @@ class ObbTW(TensorWrapper):
         in place mark obbs in this ObbTW as invalid via mask
         """
         assert invalid_mask.ndim == self.ndim - 1, "invalid_mask must match ObbTW"
-        assert (
-            invalid_mask.shape[:-1] == self.shape[:-1]
-        ), "invalid_mask must match ObbTW"
+        assert invalid_mask.shape[:-1] == self.shape[:-1], (
+            "invalid_mask must match ObbTW"
+        )
         self._data[invalid_mask] = PAD_VAL
 
     def _mark_invalid_ids(self, invalid_ids: torch.Tensor) -> "ObbTW":
@@ -531,9 +531,9 @@ class ObbTW(TensorWrapper):
                        The order of the images sizes should be [(w_rgb, h_rgb), (w_slaml, h_slaml), (w_slamr, h_slamr)].
         """
         ## Early check the input input sizes
-        assert (
-            len(image_sizes) == 3
-        ), f"the image sizes of 3 video stream should be given, but only got {len(image_sizes)}"
+        assert len(image_sizes) == 3, (
+            f"the image sizes of 3 video stream should be given, but only got {len(image_sizes)}"
+        )
         for s in image_sizes:
             assert len(s) == 2
 
@@ -879,7 +879,9 @@ def project_bb3d_onto_image(
             and T_world_rig.dim() == 2
             and cam.shape[0]
             == T_world_rig.shape[0]  # T dim should be the same for cam and T_world_rig
-        ), f"Unsupported input shapes: obb: {obbs.shape}, cam: {cam.shape}, T_world_rig: {T_world_rig.shape}."
+        ), (
+            f"Unsupported input shapes: obb: {obbs.shape}, cam: {cam.shape}, T_world_rig: {T_world_rig.shape}."
+        )
 
         # To the consistent shapes
         obbs = obbs.unsqueeze(0).unsqueeze(0)  # expand to B(1)xT(1)xNx34
@@ -910,12 +912,14 @@ def project_bb3d_onto_image(
         )
 
     # check if all tensors are of correct shapes.
-    assert (
-        obbs.dim() == 4 and cam.dim() == 3 and T_world_rig.dim() == 3
-    ), f"The shapes of obbs, cam and T_world_rig should be BxTxNx34, BxTxC, and BxTx12, respectively. However, we got obbs: {obbs.shape}, cam: {cam.shape}, T_world_rig: {T_world_rig.shape}"
+    assert obbs.dim() == 4 and cam.dim() == 3 and T_world_rig.dim() == 3, (
+        f"The shapes of obbs, cam and T_world_rig should be BxTxNx34, BxTxC, and BxTx12, respectively. However, we got obbs: {obbs.shape}, cam: {cam.shape}, T_world_rig: {T_world_rig.shape}"
+    )
     assert (
         obbs.shape[0:2] == cam.shape[0:2] and obbs.shape[0:2] == T_world_rig.shape[0:2]
-    ), f"The BxT dims should be the same for all tensors, but got obbs: {obbs.shape}, cam: {cam.shape}, T_world_rig: {T_world_rig.shape}"
+    ), (
+        f"The BxT dims should be the same for all tensors, but got obbs: {obbs.shape}, cam: {cam.shape}, T_world_rig: {T_world_rig.shape}"
+    )
 
     B, T = cam.shape[0:2]
     N = obbs.shape[-2]

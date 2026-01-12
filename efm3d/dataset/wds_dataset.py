@@ -69,9 +69,9 @@ def convert_to_aria_multimodal_dataset(sample):
             ]:
                 mm_sample[k] = PoseTW.from_matrix3x4(v.float())
             elif k in ARIA_CALIB:
-                assert (
-                    v.shape[-1] == DEFAULT_CAM_DATA_SIZE
-                ), "only allow Fisheye624 cameras"
+                assert v.shape[-1] == DEFAULT_CAM_DATA_SIZE, (
+                    "only allow Fisheye624 cameras"
+                )
                 mm_sample[k] = CameraTW(v)
             elif k == ARIA_OBB_PADDED:
                 mm_sample[ARIA_OBB_PADDED] = ObbTW(v)

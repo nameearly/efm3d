@@ -136,7 +136,7 @@ def get_inst_id_in_camera(
         nearest_time = bb2_times[nearest_idx]
         if abs(time - nearest_time) >= 1_000_000:
             print(
-                f"Error: {camera_name}: target time {time}ns has too large gap from the found nearest time {nearest_time}ns with gap {abs(time-nearest_time)}ns, skip this frame."
+                f"Error: {camera_name}: target time {time}ns has too large gap from the found nearest time {nearest_time}ns with gap {abs(time - nearest_time)}ns, skip this frame."
             )
             return []
         print(

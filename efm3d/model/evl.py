@@ -25,7 +25,6 @@ from efm3d.aria.aria_constants import (
 )
 from efm3d.model.cnn import InvResnetFpn3d, VolumeCNNHead
 from efm3d.model.lifter import VideoBackbone3d
-
 from efm3d.model.video_backbone import VideoBackbone
 from efm3d.utils.detection_utils import simple_nms3d, voxel2obb
 from efm3d.utils.file_utils import parse_global_name_to_id_csv

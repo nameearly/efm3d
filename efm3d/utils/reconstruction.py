@@ -15,7 +15,6 @@
 from typing import Literal
 
 import torch
-
 from efm3d.aria.aria_constants import (
     ARIA_CALIB,
     ARIA_DISTANCE_M,
@@ -278,9 +277,9 @@ def compute_occupancy_loss_subvoxel(
             pred = torch.cat([free_samples, surf_samples, occ_samples], -1)
             gt = torch.cat([free_gt, surf_gt, occ_gt], -1)
             loss = compute_focal_loss(pred, gt)
-        assert (
-            not loss.isnan().any()
-        ), f"have nans in loss {loss.isnan().count_nonzero()}"
+        assert not loss.isnan().any(), (
+            f"have nans in loss {loss.isnan().count_nonzero()}"
+        )
         # handle no samples case in mean
         num = max(1.0, num)
         loss = loss.sum() / num
