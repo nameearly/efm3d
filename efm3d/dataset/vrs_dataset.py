@@ -330,7 +330,7 @@ class VrsSequenceDataset(Dataset):
             self.obs = self.load_objects()
         if self.obs is not None:
             obb_freq = int(1.0 / (1e-9 * (self.obb_times[1] - self.obb_times[0])))
-            obb_subsample = int(obb_freq / frame_rate)
+            obb_subsample = max(1, int(obb_freq / frame_rate))
             self.obb_times = self.obb_times[::obb_subsample]
 
         # Add points
@@ -779,6 +779,8 @@ class VrsSequenceDataset(Dataset):
                 ARIA_POINTS_VOL_MAX,
                 ARIA_OBB_SEM_ID_TO_NAME,
             ]:
+                if isinstance(sample[key], torch.Tensor) and sample[key].shape[0] == 0:
+                    continue
                 sample[key] = tensor_unify(sample[key], self.frame_rate)
 
         if self.preprocess:

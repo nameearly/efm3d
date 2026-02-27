@@ -39,12 +39,13 @@ logger.setLevel(logging.INFO)
 
 
 class EfmInference:
-    def __init__(self, streamer, model, output_dir, device, zip):
+    def __init__(self, streamer, model, output_dir, device, zip, obb_only=False):
         self.streamer = streamer
         self.model = model
         self.output_dir = output_dir
         self.device = device
         self.zip = zip
+        self.obb_only = obb_only
         self.metadata_saved = False
         self.Ts_wv = []  # all T_world_voxel as one tensor
 
@@ -113,9 +114,10 @@ class EfmInference:
                     sem_id_to_name=gt_sem_id_to_name,
                 )
 
-        # occupancy predictions
+        # occupancy predictions (skipped in obb_only mode)
         if (
-            "occ_pr" in data
+            not self.obb_only
+            and "occ_pr" in data
             and ARIA_POINTS_VOL_MIN in data
             and ARIA_POINTS_VOL_MAX in data
         ):
@@ -154,7 +156,7 @@ class EfmInference:
             batchify(batch, device=self.device)
 
             with torch.no_grad():
-                output = self.model(batch)
+                output = self.model(batch, obb_only=self.obb_only)
                 batch.update(output)
                 self.save_output(batch, idx, self.per_snip_dir)
             if ARIA_OBB_SEM_ID_TO_NAME in batch:

@@ -611,13 +611,15 @@ def load_trajectory_aeo(
 
     T_world_rigs = {}
     header = lines[0].strip().split(",")
-    if len(header) not in {26, 28, 29}:
-        print(f"Invalid header, expected 26, 28 or 29 columns, but got {len(header)}")
+    if len(header) not in {20, 26, 28, 29}:
+        print(
+            f"Invalid header, expected 20, 26, 28 or 29 columns, but got {len(header)}"
+        )
         print(header)
         return None
 
     start_index = 0
-    if len(header) == 28:  # no recording_source field in this version
+    if len(header) in {20, 28}:  # no recording_source field in this version
         start_index = -1
 
     N = min(len(lines), load_first_n)

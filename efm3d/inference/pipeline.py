@@ -139,6 +139,8 @@ def run_one(
     snip_stride=0.1,
     voxel_res=0.04,
     output_dir="./output",
+    obb_only=False,
+    skip_video=False,
 ):
     output_dir = create_output_dir(output_dir, model_ckpt, data_path)
 
@@ -164,7 +166,9 @@ def run_one(
     )
 
     # per-snippet inference
-    efm_inf = EfmInference(streamer, model, output_dir, device=device, zip=False)
+    efm_inf = EfmInference(
+        streamer, model, output_dir, device=device, zip=False, obb_only=obb_only
+    )
     efm_inf.run()
     del efm_inf
     del model
@@ -195,28 +199,32 @@ def run_one(
                 f"Skip obb evaluation due to missing dependency, please see INSTALL.md"
             )
 
-    # fuse mesh
-    vol_fusion = VolumetricFusion(output_dir, voxel_res=voxel_res, device=device)
-    vol_fusion.run()
-    fused_mesh = vol_fusion.get_trimesh()
-    pred_mesh_ply = os.path.join(output_dir, "fused_mesh.ply")
-    if fused_mesh.vertices.shape[0] > 0 and fused_mesh.faces.shape[0] > 0:
-        fused_mesh.export(pred_mesh_ply)
+    vol_fusion = None
+    if not obb_only:
+        # fuse mesh
+        vol_fusion = VolumetricFusion(output_dir, voxel_res=voxel_res, device=device)
+        vol_fusion.run()
+        fused_mesh = vol_fusion.get_trimesh()
+        pred_mesh_ply = os.path.join(output_dir, "fused_mesh.ply")
+        if fused_mesh.vertices.shape[0] > 0 and fused_mesh.faces.shape[0] > 0:
+            fused_mesh.export(pred_mesh_ply)
 
-    # eval mesh
-    gt_mesh_ply = get_gt_mesh_ply(data_path)
-    if os.path.exists(pred_mesh_ply) and os.path.exists(gt_mesh_ply):
-        pred_trimesh = trimesh.load(pred_mesh_ply)
-        gt_trimesh = trimesh.load(gt_mesh_ply)
-        if "adt" in gt_mesh_ply:
-            gt_trimesh = correct_adt_mesh_gravity(gt_trimesh)
+        # eval mesh
+        gt_mesh_ply = get_gt_mesh_ply(data_path)
+        if os.path.exists(pred_mesh_ply) and os.path.exists(gt_mesh_ply):
+            pred_trimesh = trimesh.load(pred_mesh_ply)
+            gt_trimesh = trimesh.load(gt_mesh_ply)
+            if "adt" in gt_mesh_ply:
+                gt_trimesh = correct_adt_mesh_gravity(gt_trimesh)
 
-        mesh_metrics, _, _ = eval_mesh_to_mesh(
-            pred=pred_trimesh,
-            gt=gt_trimesh,
-            sample_num=1000,
-        )
-        metrics.update(mesh_metrics)
+            mesh_metrics, _, _ = eval_mesh_to_mesh(
+                pred=pred_trimesh,
+                gt=gt_trimesh,
+                sample_num=1000,
+            )
+            metrics.update(mesh_metrics)
+    else:
+        print("Skipping volume fusion (--obb_only)")
 
     # write metrics
     if len(metrics) > 0:
@@ -225,17 +233,21 @@ def run_one(
         print(json.dumps(metrics, indent=2, sort_keys=True))
 
     # viz
-    streamer = create_streamer(
-        data_path=data_path,
-        snippet_length_s=1.0,
-        stride_length_s=1.0,
-        max_snip=math.ceil((max_snip - 1) * snip_stride),
-    )
-    vol_fusion.reinit()
-    viz_path = generate_video(
-        streamer, output_dir=output_dir, vol_fusion=vol_fusion, stride_s=snip_stride
-    )
-    print(f"output viz file to {os.path.abspath(viz_path)}")
+    if not skip_video:
+        streamer = create_streamer(
+            data_path=data_path,
+            snippet_length_s=1.0,
+            stride_length_s=1.0,
+            max_snip=math.ceil((max_snip - 1) * snip_stride),
+        )
+        if vol_fusion is not None:
+            vol_fusion.reinit()
+        viz_path = generate_video(
+            streamer, output_dir=output_dir, vol_fusion=vol_fusion, stride_s=snip_stride
+        )
+        print(f"output viz file to {os.path.abspath(viz_path)}")
 
     # rm per-snippet occupancy tensors
-    shutil.rmtree(os.path.join(output_dir, "per_snip"))
+    per_snip_dir = os.path.join(output_dir, "per_snip")
+    if os.path.exists(per_snip_dir):
+        shutil.rmtree(per_snip_dir)

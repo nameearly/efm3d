@@ -60,6 +60,16 @@ if __name__ == "__main__":
         default=0.04,
         help="voxel resolution in meter for volumetric fusion",
     )
+    parser.add_argument(
+        "--obb_only",
+        action="store_true",
+        help="only run OBB prediction, skip occupancy prediction and volume fusion for faster inference on long sequences",
+    )
+    parser.add_argument(
+        "--skip_video",
+        action="store_true",
+        help="skip video generation",
+    )
     args = parser.parse_args()
 
     run_one(
@@ -70,4 +80,6 @@ if __name__ == "__main__":
         snip_stride=args.snip_stride,
         voxel_res=args.voxel_res,
         output_dir=args.output_dir,
+        obb_only=args.obb_only,
+        skip_video=args.skip_video,
     )
